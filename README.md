@@ -1,31 +1,49 @@
-# ARCHITECT-Antivirus (v5.0)
-
-A modular, lightweight, and defensive file scanner written entirely in Python using only the standard library. Designed for educational auditing, static inspection, heuristic triage, and structured reporting.
-
-## Key Capabilities
-
-- **Zero External Dependencies:** Runs natively out of the box on standard Python 3.8+ environments (including Termux/Linux).
-- **Multi-Vector Static Analysis:**
-  - **Cryptographic Hashing:** Computes SHA-256 using chunked streaming (memory-safe for large archives/payloads).
-  - **Signature Matching:** Exact hash lookups against threat intelligence signatures.
-  - **Heuristic Indicators:** Differentiates between known threats and suspicious indicators (flagged extensions, keyword heuristics).
-- **Persistent Audit Logging:** Backed by SQLite to store scan histories, run metrics, error rates, and detection breakdowns.
-- **Reporting Engine:** Automatic structured report generation in both JSON and CSV formats.
+# 🛡️ ARCHITECT Antivirus v5.0 — Technical Whitepaper & Product Guide
+### Modular Cryptographic & Heuristic Inspection Framework
+**Lead Architect & Core Developer:** أيمن الخبجي (Ayman Al-Khubji)  
+**System Architecture:** Pure Python 3.8+ Standard Library (Zero-Dependency Engine)
 
 ---
 
-## Architecture & Directory Structure
+## 1. نبذة عن المنتج (Product Overview)
+
+**ARCHITECT Antivirus v5.0** هو نظام فحص وتحليل أمني ساكن (Static Analysis Engine) للملفات، مبني بالكامل على مكتبات بايثون القياسية دون الحاجة لتثبيت أي حزم خارجية (`pip`). يجمع النظام بين سرعة التحقق الرياضي التشفيري (SHA-256) والتحليل الاستدلالي (Heuristic Triage) لاكتشاف البرمجيات الخبيثة وتصنيفها وتوثيقها جنائياً داخل قاعدة بيانات علائقية سريعة.
+
+النظام صُمم ليعمل على مختلف بيئات التشغيل: **Linux**, **Android (Termux)**, و **Windows**، ليكون أداة دفاعية مثالية للتدقيق السريع، الفحص الجنائي، ومسح خوادم التخزين والأجهزة المحمولة.
+
+---
+
+## 2. الميزات التنافسية والقيمة السوقية (Value Proposition)
+
+1. **Zero External Dependencies:**
+   - لا يحتاج المستخدم إلى تثبيت مكاتب خارجية قد تتعارض مع النظام. يعمل مباشرة بمجرد توفر Python 3.8+.
+2. **Memory-Safe Streaming (حماية الذاكرة):**
+   - قراءة الملفات بنظام المقاطع المتتالية (`1MB Chunks`) يمنع حدوث انهيار في الذاكرة (Out-Of-Memory) حتى لو كان حجم الملف المفحوص يتجاوز 10 جيجابايت.
+3. **Dual-Layer Analysis Engine (تحليل ثنائي الطبقات):**
+   - **الطبقة الأولى:** مطابقة هاش التشفير الفوري $\mathcal{O}(1)$ ضد البصمات المعروفة.
+   - **الطبقة الثانية:** استدلال متقدم على مستوى امتدادات الملفات الخطرة والكلمات المفتاحية الحساسة.
+4. **Automated Forensic Database:**
+   - تسجيل متكامل لجلسات الفحص، استهلاك الوقت، نسب الأخطاء، وقائمة التهديدات داخل SQLite3.
+5. **Multi-Format Export (تقارير احترافية):**
+   - تصدير فوري لتقارير أمنية بصيغتي **JSON** (لأنظمة الـ SIEM) و **CSV** (للتحليل عبر Excel).
+
+---
+
+## 3. المعمارية الهندسية للمشروع (Architecture Blueprint)
+
+يتألف النظام من 6 طبقات برمجية منفصلة ومنظمة وفق أفضل ممارسات هندسة البرمجيات:
 
 ```text
 ARCHITECT-Antivirus/
-├── main.py              # CLI Entry point & user menu
-├── scanner.py           # Core scanning engine & hashing routines
-├── database.py          # SQLite persistence schema & data access layer
-├── reports.py           # JSON/CSV exporter
-├── signatures.py        # Threat signatures & heuristic indicators
-├── config.py            # Global paths, constants, and severity levels
-├── requirements.txt     # Dependency definitions
-├── README.md            # Documentation
-├── data/                # SQLite storage (antivirus.db)
-├── reports/             # Exported scan summaries (.json, .csv)
-└── logs/                # Audit & operational runtime logs
+│
+├── main.py              ── واجهة التحكم المركزية (CLI Dashboard) وإدارة الجلسات
+├── scanner.py           ── محرك الفحص والتدقيق التشفيري والاستدلالي
+├── database.py          ── طبقة إدارة البيانات والعمليات العلائقية (SQLite Data Access Layer)
+├── reports.py           ── محرك توليد وتصدير التقارير الجنائية (JSON & CSV)
+├── signatures.py        ── مستودع القواعد المعرفية وبصمات التهديدات
+├── config.py            ── إعدادات النظام، المسارات الافتراضية، ومستويات الخطورة
+├── requirements.txt     ── ملف المتطلبات (لا يتطلب أي مكتبات خارجية)
+│
+├── data/                ── وحدة التخزين الدائم لقاعدة البيانات (antivirus.db)
+├── reports/             ── وحدة تصدير التقارير الجنائية والنهائية
+└── logs/                ── وحدة تسجيل الأحداث والأخطاء التشغيلية
